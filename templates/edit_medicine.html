@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-6 max-w-2xl">
+    <h2 class="text-2xl font-bold mb-4">Edit Medicine</h2>
+
+    <form method="POST" class="space-y-4 bg-white p-6 rounded shadow">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div>
+            {{ form.dosage.label_tag }}
+            {{ form.dosage }}
+            {{ form.dosage.errors }}
+        </div>
+
+        <div>
+            {{ form.frequency.label_tag }}
+            {{ form.frequency }}
+            {{ form.frequency.errors }}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                {{ form.start_date.label_tag }}
+                {{ form.start_date }}
+                {{ form.start_date.errors }}
+            </div>
+            <div>
+                {{ form.end_date.label_tag }}
+                {{ form.end_date }}
+                {{ form.end_date.errors }}
+            </div>
+        </div>
+
+        <div class="flex gap-2">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+            <a href="{% url 'medicines_list' %}" class="px-4 py-2 border rounded">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

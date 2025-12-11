@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-6 max-w-md mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Login</h2>
+    <form method="POST" class="bg-white p-6 rounded shadow">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+    </form>
+    <p class="mt-4 text-sm">Don't have an account? <a href="{% url 'signup' %}" class="text-blue-600">Sign up</a></p>
+</div>
+{% endblock %}

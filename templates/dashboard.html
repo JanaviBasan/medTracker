@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="p-6">
+    <h1 class="text-3xl font-bold mb-6">Welcome to MedCia</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Medicines Card -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold">Medicines</h2>
+            <p class="text-gray-600">Total added: {{ total_medicines }}</p>
+        </div>
+
+        <!-- Reminders Card -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold">Reminders</h2>
+            <p class="text-gray-600">Active reminders: {{ total_reminders }}</p>
+        </div>
+
+        <!-- Next Dose Card -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold">Next Dose</h2>
+
+            {% if next_dose_time %}
+                <p class="text-gray-600">
+                    Next dose: <strong>{{ next_dose_medicine }}</strong><br>
+                    Time: {{ next_dose_time }}
+                </p>
+            {% else %}
+                <p class="text-gray-600">No data yet</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6">Profile</h1>
+
+<div class="bg-white p-6 shadow rounded-lg max-w-xl">
+
+    <!-- Profile Header -->
+    <div class="flex items-center gap-6">
+        <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-3xl font-bold text-gray-600">
+            {{ request.user.username|first|upper }}
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-bold">{{ request.user.username }}</h2>
+            <p class="text-gray-600">{{ request.user.email }}</p>
+            <p class="text-gray-600 mt-1">
+                Phone: {{ request.user.userprofile.phone|default:"Not added" }}
+            </p>
+        </div>
+    </div>
+
+    <hr class="my-6">
+
+    <!-- Buttons Section -->
+    <div class="flex flex-col gap-4">
+
+        <!-- Edit Profile (phone update form) -->
+        <a href="{% url 'profile_edit' %}" 
+           class="bg-blue-600 text-white py-3 px-5 rounded text-center hover:bg-blue-700">
+            Edit Profile
+        </a>
+
+        <!-- Change Password -->
+        <a href="{% url 'password_change' %}" 
+           class="bg-yellow-500 text-white py-3 px-5 rounded text-center hover:bg-yellow-600">
+            Change Password
+        </a>
+
+        <!-- Logout -->
+        <a href="{% url 'logout' %}" 
+           class="bg-red-600 text-white py-3 px-5 rounded text-center hover:bg-red-700">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

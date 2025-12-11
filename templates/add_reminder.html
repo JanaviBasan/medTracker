@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-6 max-w-md">
+    <h2 class="text-3xl font-bold mb-6">Add Reminder</h2>
+
+    <form method="POST" class="bg-white p-6 rounded shadow space-y-4">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div>
+            {{ form.medicine.label_tag }}
+            {{ form.medicine }}
+            {{ form.medicine.errors }}
+        </div>
+
+        <div>
+            {{ form.reminder_time.label_tag }}
+            {{ form.reminder_time }}
+            {{ form.reminder_time.errors }}
+        </div>
+
+        <button class="bg-green-600 text-white px-4 py-2 rounded">Save Reminder</button>
+    </form>
+</div>
+{% endblock %}
