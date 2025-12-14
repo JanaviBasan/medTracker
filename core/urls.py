@@ -1,7 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import reminders_api
+# from .views import reminders_api
+
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
@@ -38,7 +39,7 @@ urlpatterns = [
         template_name="password_change_done.html"
     ), name='password_change_done'),
 
-    path("api/reminders/", reminders_api, name="reminders_api"),
+    # path("api/reminders/", reminders_api, name="reminders_api"),
 
     path("api/get-reminders/", views.api_get_reminders),
     path("api/mark-delivered/<int:pk>/", views.api_mark_delivered),
