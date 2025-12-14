@@ -7,10 +7,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.timezone import make_aware
-
+from django.http import JsonResponse
 from .models import Medicine, Reminder
 from .forms import SignupForm, MedicineForm, ReminderForm
-
+from django.utils import timezone
 
 def dashboard(request):
     medicines = Medicine.objects.all()
@@ -55,9 +55,30 @@ def add_medicine(request):
 
 @login_required
 def reminders(request):
-    upcoming = Reminder.objects.filter(user=request.user, delivered=False).order_by('reminder_time')
-    past = Reminder.objects.filter(user=request.user, delivered=True).order_by('-reminder_time')[:50]
-    return render(request, "reminders.html", {"upcoming": upcoming, "past": past})
+    now = timezone.now()
+
+    # Mark old reminders as delivered
+    Reminder.objects.filter(
+        reminder_time__lt=now,
+        delivered=False
+    ).update(delivered=True)
+
+    # Load lists
+    upcoming = Reminder.objects.filter(
+        user=request.user,
+        delivered=False
+    ).order_by('reminder_time')
+
+    past = Reminder.objects.filter(
+        user=request.user,
+        delivered=True
+    ).order_by('-reminder_time')
+
+    return render(request, "reminders.html", {
+        "upcoming": upcoming,
+        "past": past
+    })
+
 
 @login_required
 def add_reminder(request):
@@ -65,14 +86,16 @@ def add_reminder(request):
         form = ReminderForm(request.POST)
         if form.is_valid():
             reminder = form.save(commit=False)
-            reminder.user = request.user      # <-- assign logged-in user
+            reminder.user = request.user
+            reminder.delivered = False
             reminder.save()
+
             messages.success(request, "Reminder added.")
             return redirect('reminders')
     else:
         form = ReminderForm()
-    return render(request, "add_reminder.html", {"form": form})
 
+    return render(request, "add_reminder.html", {"form": form})
 
 @login_required
 def profile(request):
@@ -162,3 +185,64 @@ def delete_medicine(request, pk):
         messages.success(request, "Medicine deleted.")
         return redirect('medicines_list')
     return render(request, "confirm_delete.html", {"medicine": med})
+
+@login_required
+def edit_reminder(request, pk):
+    reminder = get_object_or_404(Reminder, pk=pk)
+
+    if request.method == "POST":
+        form = ReminderForm(request.POST, instance=reminder)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Reminder updated.")
+            return redirect('reminders')
+    else:
+        form = ReminderForm(instance=reminder)
+
+    return render(request, "edit_reminder.html", {"form": form, "reminder": reminder})
+
+@login_required
+def delete_reminder(request, pk):
+    reminder = get_object_or_404(Reminder, pk=pk)
+
+    if request.method == "POST":
+        reminder.delete()
+        messages.success(request, "Reminder deleted.")
+        return redirect('reminders')
+
+    return render(request, "confirm_delete_reminder.html", {"reminder": reminder})
+
+@login_required
+def reminders_api(request):
+    reminders = Reminder.objects.all()
+    data = []
+
+    for r in reminders:
+        data.append({
+            "medicine": r.medicine.name,
+            "reminder_time": r.reminder_time.isoformat()
+        })
+
+    return JsonResponse(data, safe=False)
+
+@login_required
+def api_get_reminders(request):
+    reminders = Reminder.objects.filter(user=request.user, delivered=False)
+    data = [
+        {
+            "id": r.id,
+            "medicine": r.medicine.name,
+            "time": r.reminder_time.isoformat(),
+            "delivered": r.delivered
+        }
+        for r in reminders
+    ]
+    return JsonResponse(data, safe=False)
+
+
+@login_required
+def api_mark_delivered(request, pk):
+    r = Reminder.objects.get(pk=pk, user=request.user)
+    r.delivered = True
+    r.save()
+    return JsonResponse({"status": "ok"})

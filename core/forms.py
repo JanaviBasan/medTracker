@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Medicine, Reminder
 
+
+# -------------------- Signup Form --------------------
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
@@ -18,6 +20,8 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match.")
         return cleaned
 
+
+# -------------------- Medicine Form --------------------
 class MedicineForm(forms.ModelForm):
     class Meta:
         model = Medicine
@@ -30,11 +34,23 @@ class MedicineForm(forms.ModelForm):
             "end_date": forms.DateInput(attrs={"class": "w-full p-2 border rounded", "type": "date"}),
         }
 
+
+# -------------------- Reminder Form (FIXED) --------------------
 class ReminderForm(forms.ModelForm):
     class Meta:
         model = Reminder
-        fields = ["medicine", "reminder_time"]
+        fields = ["medicine", "reminder_time"]   # ← REQUIRED
+
         widgets = {
-            "medicine": forms.Select(attrs={"class": "w-full p-2 border rounded"}),
-            "reminder_time": forms.DateTimeInput(attrs={"class": "w-full p-2 border rounded", "type": "datetime-local"}),
+            "reminder_time": forms.DateTimeInput(
+                attrs={
+                    "type": "datetime-local",
+                    "class": "border p-2 rounded w-full",
+                },
+                format="%Y-%m-%dT%H:%M",
+            )
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["reminder_time"].input_formats = ['%Y-%m-%dT%H:%M']

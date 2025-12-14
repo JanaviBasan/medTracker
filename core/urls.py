@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import reminders_api
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
@@ -14,6 +15,8 @@ urlpatterns = [
     # Reminders
     path('reminders/', views.reminders, name='reminders'),
     path('add-reminder/', views.add_reminder, name='add_reminder'),
+    path("reminders/<int:pk>/edit/", views.edit_reminder, name="edit_reminder"),
+    path("reminders/<int:pk>/delete/", views.delete_reminder, name="delete_reminder"),
 
     # Profile & auth
     path('profile/', views.profile, name='profile'),
@@ -34,4 +37,10 @@ urlpatterns = [
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name="password_change_done.html"
     ), name='password_change_done'),
+
+    path("api/reminders/", reminders_api, name="reminders_api"),
+
+    path("api/get-reminders/", views.api_get_reminders),
+    path("api/mark-delivered/<int:pk>/", views.api_mark_delivered),
+
 ]
