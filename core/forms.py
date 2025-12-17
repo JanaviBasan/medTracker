@@ -19,7 +19,7 @@ class SignupForm(forms.ModelForm):
         if p1 and p2 and p1 != p2:
             raise forms.ValidationError("Passwords do not match.")
         return cleaned
-
+    
 
 # -------------------- Medicine Form --------------------
 class MedicineForm(forms.ModelForm):

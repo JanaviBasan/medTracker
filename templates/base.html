@@ -9,8 +9,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <!-- OPTIONAL: Icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-..."
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+    <!-- <script src="https://kit.fontawesome.com/bb9aca6d33.js" crossorigin="anonymous"></script> -->
+    <!-- OPTIONAL: Icons
+    <script src="https://unpkg.com/feather-icons"></script> -->
   </head>
 
   <body class="bg-gray-50 text-gray-900">
@@ -23,17 +32,15 @@
     {% endif %}
     <!-- Desktop Sidebar -->
     <div
-      class="hidden md:flex h-screen w-64 bg-white shadow-lg fixed top-0 left-0 flex-col p-6"
+      class="hidden md:flex h-screen w-62 bg-white shadow-lg fixed top-0 left-0 flex-col p-6"
     >
-      <h1 class="text-2xl font-bold text-blue-600 mb-8">MedCia</h1>
+      <h1 class="text-2xl font-bold text-blue-600 mb-8"><i class="fa-solid fa-pills fa-rotate-by fa-lg" style="color: #1e3f7b; --fa-rotate-angle: 55deg;"></i>MedCia</h1>
 
       <nav class="flex flex-col gap-4 text-lg">
-        <a href="/" class="hover:text-blue-600">Dashboard</a>
-        <a href="/add-medicine/" class="block py-2 px-4 hover:bg-gray-200"
-          >Add Medicine</a
-        >
-        <a href="/reminders" class="hover:text-blue-600">Reminders</a>
-        <a href="/profile" class="hover:text-blue-600">Profile</a>
+        <a href="/" class="hover:text-blue-600"><i class="fa-solid fa-gauge-simple fa-lg" style="color: #255ab6;"></i> Dashboard</a>
+        <a href="/add-medicine/" class="hover:text-blue-600"><i class="fa-solid fa-circle-plus fa-lg" style="color: #025ab6;"></i> Add Medicine</a>
+        <a href="/reminders" class="hover:text-blue-600"><i class="fa-solid fa-bell fa-lg" style="color: #025ab6;"></i> Reminders</a>
+        <a href="/profile" class="hover:text-blue-600"><i class="fa-solid fa-user fa-lg" style="color: #025ab6;"></i> Profile</a>
       </nav>
     </div>
 
@@ -77,9 +84,10 @@
         z-index: 9999;
         text-align: center;
       "
-    >
+    > 
       <p id="reminderText">Take Medication</p>
-      <button onclick="closeReminderModal()">OK</button>
+      <i class="fa-solid fa-clock-rotate-left fa-lg" style="color: #24385b;"></i>
+      <button onclick="closeReminderModal()" >OK</button>
       <script src="{% static 'js/reminder_notifier.js' %}"></script>
     </div>
   </body>
